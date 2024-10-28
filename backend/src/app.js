@@ -1,36 +1,37 @@
-import express from 'express'
-import cors from 'cors'
+import express from "express";
+import cors from "cors";
 
-import conn from './config/conn.js'
+import conn from "./config/conn.js";
 import {
-    Empresa, 
-    Usuario, 
-    Publicacao, 
-    Comentario, 
-    Curtida,
-} from "./models/index.js"
+  Empresa,
+  Usuario,
+  Publicacao,
+  Comentario,
+  Curtida,
+} from "./models/index.js";
 
 import {
-    empresaRouter, 
-    usuarioRouter, 
-    publicacaoRouter, 
-} from "./routes/index.js"
+  empresaRouter,
+  usuarioRouter,
+  publicacaoRouter,
+} from "./routes/index.js";
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.urlencoded({extended: true})) //body com imagem
-app.use(express.json()) //body apenas com texto
+app.use(cors());
+app.use(express.urlencoded({ extended: true })); //body com imagem
+app.use(express.json()); //body apenas com texto
 
 conn
-    .sync()
-    .then()
-    .catch((error) => console.error(error))
+  .sync()
+  .then()
+  .catch((error) => console.error(error));
+
+app.use("/api/empresas", empresaRouter);
+app.use("/api/publicacoes", publicacaoRouter);
 
 app.use("*", (req, res) => {
-    res.status(404).json({err: "Rota não encontrada"})
-})
-
-app.use("/api/empresas", empresaRouter)
+  res.status(404).json({ err: "Rota não encontrada" });
+});
 
 export default app;
